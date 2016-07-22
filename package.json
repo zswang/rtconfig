@@ -1,0 +1,49 @@
+{
+  "name": "rtconfig",
+  "version": "0.0.29",
+  "description": "A real time updated configuration.",
+  "main": "lib/rtconfig.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zswang/rtconfig.git"
+  },
+  "keywords": [
+    "svg",
+    "background",
+    "texture"
+  ],
+  "author": {
+    "name": "zswang",
+    "url": "http://weibo.com/zswang"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zswang/rtconfig/issues"
+  },
+  "homepage": "https://github.com/zswang/rtconfig",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-examplejs": "^0.0.9",
+    "gulp-jdists": "^0.0.5",
+    "istanbul": "^0.3.17",
+    "jshint": "^2.5.8",
+    "mocha": "^2.0.1",
+    "should": "^4.1.0"
+  },
+  "dependencies": {},
+  "scripts": {
+    "_update_version": "node version.js",
+    "_dist": "gulp",
+    "lint": "jshint src/*.js",
+    "test": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec",
+    "example": "gulp example",
+    "mocha": "mocha",
+    "dist": "npm run _update_version && npm run example && npm run _dist && npm run test"
+  },
+  "files": [
+    "lib",
+    "README.md"
+  ]
+}
