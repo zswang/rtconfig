@@ -136,4 +136,4 @@ return (
       self.update();
     }, this.interval);
   }
-}
+};
