@@ -24,6 +24,8 @@ $ npm install rtconfig
 ### 示例
 
 ```js
+var RealtimeConfig = require('rtconfig');
+
 var config = new RealtimeConfig('config/config.js');
 
 app.get('commit', function (req, res) {
