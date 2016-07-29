@@ -1,3 +1,12 @@
+'use strict';
+/*istanbul ignore next*/
+
+let symbolFilename = Symbol();
+let symbolInterval = Symbol();
+let symbolOnUpdate = Symbol();
+let symbolModifyTime = Symbol();
+let symbolConfig = Symbol();
+
 /*istanbul ignore next*/
 module.exports = class RealtimeConfig {
   /*<jdists encoding="ejs" data="../package.json">*/
@@ -81,20 +90,52 @@ module.exports = class RealtimeConfig {
    */
   constructor(filename, options) {
     options = options || {};
-    this.interval = options.interval || 60000;
-    this.onupdate = options.onupdate;
-    this.filename = filename;
+    this[symbolInterval] = options.interval || 60000;
+    this[symbolOnUpdate] = options.onupdate;
+    this[symbolFilename] = filename;
+    this[symbolConfig] = {};
 
     this.update();
   }
 
+  /**
+   * 转换为 JSON 对象
+   *
+   * @return {Object}
+   */
+  getJSON() {
+    return this[symbolConfig];
+  }
+
+  /**
+   * 转为字符串
+   *
+   * @return {String}
+   * @example RealtimeConfig:toString()
+    ```js
+    var filename = 'test/test2-1.config';
+    var fs = require('fs');
+    fs.writeFileSync(filename, '{host: "127.0.0.1", port: 3309}');
+    var obj = new RealtimeConfig(filename);
+    fs.unlinkSync(filename);
+    console.log(obj.toString());
+    // > {"host":"127.0.0.1","port":3309}
+    ```
+   */
+  toString() {
+    return JSON.stringify(this.getJSON());
+  }
+
+  /**
+   * 定时更新数据
+   */
   update() {
     const fs = require('fs');
     let self = this;
     try {
-      var stat = fs.statSync(this.filename);
-      if (this.modifyTime !== Number(stat.mtime)) {
-        let content = String(fs.readFileSync(this.filename));
+      var stat = fs.statSync(this[symbolFilename]);
+      if (this[symbolModifyTime] !== Number(stat.mtime)) {
+        let content = String(fs.readFileSync(this[symbolFilename]));
         let config = {};
         if (content.indexOf('module.exports') >= 0) {
           config = new Function(`
@@ -112,20 +153,21 @@ return (
 );`
           )();
         }
-        this.modifyTime = Number(stat.mtime);
+        this[symbolModifyTime] = Number(stat.mtime);
+        Object.assign(this[symbolConfig], config);
 
-        Object.keys(config).forEach(function (key) {
+        Object.keys(self[symbolConfig]).forEach(function (key) {
           Object.defineProperty(self, key, {
             get: function () {
-              return config[key];
+              return self[symbolConfig][key];
             },
             configurable: true
           });
 
         });
 
-        if (typeof this.onupdate === 'function') {
-          this.onupdate(config);
+        if (typeof this[symbolOnUpdate] === 'function') {
+          this[symbolOnUpdate](config);
         }
       }
     }
@@ -134,6 +176,6 @@ return (
     }
     setTimeout(function () {
       self.update();
-    }, this.interval);
+    }, this[symbolInterval]);
   }
 };

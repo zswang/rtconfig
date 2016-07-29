@@ -67,5 +67,16 @@ describe("src/rtconfig.js", function () {
     }, 1000);
   });
           
+  it("RealtimeConfig:toString()", function () {
+    examplejs_printLines = [];
+    var filename = 'test/test2-1.config';
+    var fs = require('fs');
+    fs.writeFileSync(filename, '{host: "127.0.0.1", port: 3309}');
+    var obj = new RealtimeConfig(filename);
+    fs.unlinkSync(filename);
+    examplejs_print(obj.toString());
+    assert.equal(examplejs_printLines.join("\n"), "{\"host\":\"127.0.0.1\",\"port\":3309}"); examplejs_printLines = [];
+  });
+          
 });
          
