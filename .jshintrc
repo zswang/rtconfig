@@ -1,5 +1,6 @@
 {
   "undef": false,
   "esversion": 6,
-  "evil": true
+  "evil": true,
+  "node": true
 }
