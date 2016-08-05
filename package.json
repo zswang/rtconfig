@@ -1,6 +1,6 @@
 {
   "name": "rtconfig",
-  "version": "0.1.0",
+  "version": "0.1.6",
   "description": "A real time updated configuration.",
   "main": "lib/rtconfig.js",
   "repository": {

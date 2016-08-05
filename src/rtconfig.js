@@ -7,8 +7,10 @@ let symbolOnUpdate = Symbol();
 let symbolModifyTime = Symbol();
 let symbolConfig = Symbol();
 
+const EventEmitter = require('events');
+
 /*istanbul ignore next*/
-module.exports = class RealtimeConfig {
+module.exports = class RealtimeConfig extends EventEmitter {
   /*<jdists encoding="ejs" data="../package.json">*/
   /**
    * @file <%- name %>
@@ -87,10 +89,31 @@ module.exports = class RealtimeConfig {
       // * done
     }, 1000);
     ```
+   * @example RealtimeConfig:option.onerror
+    ```js
+    var filename = 'test/test5.config';
+    var fs = require('fs');
+    fs.writeFileSync(filename, '#error');
+    var obj = new RealtimeConfig(filename, {
+      onerror: function (error) {
+        fs.unlinkSync(filename);
+        console.log(error);
+        // > Unexpected token ILLEGAL
+        // * done
+      }
+    });
+    ```
    */
   constructor(filename, options) {
+    super();
     options = options || {};
     this[symbolInterval] = options.interval || 60000;
+    if (typeof options.onupdate === 'function') {
+      this.on('update', options.onupdate);
+    }
+    if (typeof options.onerror === 'function') {
+      this.on('error', options.onerror);
+    }
     this[symbolOnUpdate] = options.onupdate;
     this[symbolFilename] = filename;
     this[symbolConfig] = {};
@@ -165,13 +188,11 @@ return (
           });
 
         });
-
-        if (typeof this[symbolOnUpdate] === 'function') {
-          this[symbolOnUpdate](config);
-        }
+        this.emit('update', config);
       }
     }
     catch (ex) {
+      this.emit('error', ex.message);
       console.error('Read config error. %s', ex.message);
     }
     setTimeout(function () {

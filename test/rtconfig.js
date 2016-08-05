@@ -67,6 +67,21 @@ describe("src/rtconfig.js", function () {
     }, 1000);
   });
           
+  it("RealtimeConfig:option.onerror", function (done) {
+    examplejs_printLines = [];
+    var filename = 'test/test5.config';
+    var fs = require('fs');
+    fs.writeFileSync(filename, '#error');
+    var obj = new RealtimeConfig(filename, {
+      onerror: function (error) {
+        fs.unlinkSync(filename);
+        examplejs_print(error);
+        assert.equal(examplejs_printLines.join("\n"), "Unexpected token ILLEGAL"); examplejs_printLines = [];
+        done();
+      }
+    });
+  });
+          
   it("RealtimeConfig:toString()", function () {
     examplejs_printLines = [];
     var filename = 'test/test2-1.config';
