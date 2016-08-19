@@ -177,7 +177,11 @@ return (
           )();
         }
         this[symbolModifyTime] = Number(stat.mtime);
-        Object.assign(this[symbolConfig], config);
+
+        // Object.assign(this[symbolConfig], config);
+        Object.keys(config).forEach(function (key) {
+          self[symbolConfig][key] = config[key];
+        });
 
         Object.keys(self[symbolConfig]).forEach(function (key) {
           Object.defineProperty(self, key, {
