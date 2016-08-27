@@ -89,6 +89,14 @@ module.exports = class RealtimeConfig extends EventEmitter {
       // * done
     }, 1000);
     ```
+   * @example RealtimeConfig:option.onerror catch
+    ```js
+    var filename = 'test/test5.config';
+    var fs = require('fs');
+    fs.writeFileSync(filename, '#error');
+    var obj = new RealtimeConfig(filename);
+    // * throw
+    ```
    * @example RealtimeConfig:option.onerror
     ```js
     var filename = 'test/test5.config';

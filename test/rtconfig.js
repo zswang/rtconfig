@@ -67,6 +67,18 @@ describe("src/rtconfig.js", function () {
     }, 1000);
   });
           
+  it("RealtimeConfig:option.onerror catch", function () {
+    examplejs_printLines = [];
+
+    (function() {
+    var filename = 'test/test5.config';
+    var fs = require('fs');
+    fs.writeFileSync(filename, '#error');
+    var obj = new RealtimeConfig(filename);
+    // * throw
+    }).should.throw();
+  });
+          
   it("RealtimeConfig:option.onerror", function (done) {
     examplejs_printLines = [];
     var filename = 'test/test5.config';
