@@ -50,7 +50,7 @@ const config = require('./config.json');
 ### 修改后
 
 ```js
-const config = new require('rtconfig')('./config.json');
+const config = new (require('rtconfig'))('./config.json');
 ```
 
 > 已投入实战，请放心使用
