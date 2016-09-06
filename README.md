@@ -18,7 +18,7 @@ Real Time Config 实时配置
 ### 安装
 
 ```bash
-$ npm install rtconfig
+$ npm install rtconfig --save
 ```
 
 ### 示例
@@ -38,6 +38,22 @@ app.get('commit', function (req, res) {
 	// ...
 });
 ```
+
+## 小成本修改
+
+### 原理
+
+```js
+const config = require('./config.json');
+```
+
+### 现在
+
+```js
+const config = new require('rtconfig')('./config.json');
+```
+
+> 已投入实战，请放心使用
 
 ## License
 
