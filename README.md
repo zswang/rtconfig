@@ -41,13 +41,13 @@ app.get('commit', function (req, res) {
 
 ## 小成本修改
 
-### 原理
+### 修改前
 
 ```js
 const config = require('./config.json');
 ```
 
-### 现在
+### 修改后
 
 ```js
 const config = new require('rtconfig')('./config.json');
