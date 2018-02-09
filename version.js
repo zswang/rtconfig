@@ -1,11 +1,8 @@
-var fs = require('fs');
-var path = require('path');
-
-var filename = path.join(__dirname, 'package.json');
-var package = JSON.parse(fs.readFileSync(filename));
-package.main = 'lib/' + package.name + '.js';
-package.version = package.version.replace(/-?\d+$/, function(value) {
-  return parseInt(value) + 1;
-});
-
-fs.writeFileSync(filename, JSON.stringify(package, null, '  '));
+const fs = require('fs')
+const path = require('path')
+const filename = path.join(__dirname, 'package.json')
+const package = JSON.parse(fs.readFileSync(filename))
+package.version = package.version.replace(/-?\d+$/, value => {
+  return parseInt(value) + 1
+})
+fs.writeFileSync(filename, JSON.stringify(package, null, '  '))

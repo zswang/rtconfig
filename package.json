@@ -1,8 +1,9 @@
 {
   "name": "rtconfig",
-  "version": "0.1.8",
+  "version": "1.0.0",
   "description": "A real time updated configuration.",
-  "main": "lib/rtconfig.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/zswang/rtconfig.git"
@@ -22,19 +23,24 @@
   },
   "homepage": "https://github.com/zswang/rtconfig",
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-examplejs": "^0.0.9",
-    "gulp-jdists": "^0.0.5",
+    "@types/node": "^8.9.1",
+    "gulp": "^3.9.1",
+    "gulp-examplejs": "0.0.9",
+    "gulp-jdists": "^2.0.17",
+    "gulp-rename": "^1.2.2",
+    "gulp-typescript": "^3.1.6",
     "istanbul": "^0.3.17",
-    "jshint": "^2.5.8",
+    "merge2": "^1.1.0",
     "mocha": "^2.0.1",
-    "should": "^4.1.0"
+    "should": "^4.1.0",
+    "typescript": "^2.0.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "js-yaml": "^3.10.0"
+  },
   "scripts": {
     "_update_version": "node version.js",
-    "_dist": "gulp",
-    "lint": "jshint src/*.js",
+    "_dist": "gulp dist",
     "test": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec",
     "example": "gulp example",
     "mocha": "mocha",

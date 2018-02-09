@@ -1,30 +1,51 @@
 /*jshint globalstrict: true*/
 /*global require*/
 
-'use strict';
+'use strict'
 
-var gulp = require('gulp');
-var babel = require('gulp-babel');
-var jdists = require('gulp-jdists');
-var examplejs = require('gulp-examplejs');
+const gulp = require('gulp')
+const typescript = require('gulp-typescript')
+const linenum = require('gulp-linenum')
+const jdists = require('gulp-jdists')
+const examplejs = require('gulp-examplejs')
+const rename = require('gulp-rename')
+const replace = require('gulp-replace')
+const merge2 = require('merge2')
+const pkg = require('./package')
 
-gulp.task('build', function() {
-  return gulp.src(['src/rtconfig.js'])
-    .pipe(jdists({
-      trigger: 'release'
+gulp.task('build', function () {
+  var tsResult = gulp.src('./src/*.ts')
+    .pipe(linenum({
+      prefix: `${pkg.name}/src/index.ts:`,
     }))
-    .pipe(babel({
-      presets: ['es2015']
+    .pipe(jdists())
+    .pipe(gulp.dest('./lib'))
+    .pipe(typescript({
+      moduleResolution: 'node',
+      module: 'commonjs',
+      target: 'es2015',
+      declaration: true,
     }))
-    .pipe(gulp.dest('./lib'));
-});
 
-gulp.task('example', function() {
-  return gulp.src('src/**.js')
+  return merge2([
+    tsResult.dts.pipe(gulp.dest('./lib')),
+    tsResult.js.pipe(replace(/^(\s*)var extendStatics/m, '\n$1/* istanbul ignore next */\n$&')).pipe(gulp.dest('./lib'))
+  ])
+})
+
+gulp.task('example', function () {
+  return gulp.src([
+    `src/*.ts`
+  ])
     .pipe(examplejs({
-      header: "var RealtimeConfig = require('../');\n"
+      header: `
+const { RealtimeConfig } = require('../')
+      `
     }))
-    .pipe(gulp.dest('test'));
-});
+    .pipe(rename({
+      extname: '.js'
+    }))
+    .pipe(gulp.dest('test'))
+})
 
-gulp.task('default', ['build']);
+gulp.task('dist', ['build'])
