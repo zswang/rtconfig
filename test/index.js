@@ -92,8 +92,8 @@ describe("src/index.ts", function () {
     new RealtimeConfig(filename, {
       debug: true,
       onerror: function (error) {
-        examplejs_print(error)
-        assert.equal(examplejs_printLines.join("\n"), "Invalid or unexpected token"); examplejs_printLines = [];
+        examplejs_print(['Unexpected token ILLEGAL', 'Invalid or unexpected token'].indexOf(error) >= 0)
+        assert.equal(examplejs_printLines.join("\n"), "true"); examplejs_printLines = [];
         done();
       }
     })

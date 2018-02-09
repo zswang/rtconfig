@@ -94,8 +94,8 @@ export declare class RealtimeConfig extends EventEmitter {
       new RealtimeConfig(filename, {
         debug: true,
         onerror: function (error) {
-          console.log(error)
-          // > Invalid or unexpected token
+          console.log(['Unexpected token ILLEGAL', 'Invalid or unexpected token'].indexOf(error) >= 0)
+          // > true
           // * done
         }
       })
